@@ -23,12 +23,5 @@ price['ecx_emission'] = 39.45
 
 for (i in total_data_list) {
   temp = read_csv(paste0('data/', i, '.csv'))
-  temp %>% remove_rownames(.) %>% column_to_rownames(var = 'country')
   total_data[[i]] = temp
-}
-
-lastest_year_list = c()
-
-for (j in 1:length(total_data)) {
-  lastest_year_list[j] = as.numeric(colnames(total_data[[j]])[ncol(total_data[[j]])])
 }
