@@ -1,63 +1,34 @@
 library(tidyverse)
 
-resetData = function() {
-  co2_emission_per_person = read_csv('data/co2_emissions_tonnes_per_person.csv')
-  co2_emission_total = read_csv('data/yearly_co2_emissions_1000_tonnes.csv')
-  
-  pop = read_csv('data/population/population_total.csv')
-  pop_growth = read_csv('data/population/population_growth_annual_percent.csv')
-  new_birth = read_csv('data/population/new_births_total_number_estimated.csv')
-  life_expect = read_csv('data/population/life_expectancy_years.csv')
-  
-  agricultural_land_percent = read_csv('data/environment/agricultural_land_percent_of_land_area.csv')
-  composition_plastic_waste = read_csv('data/environment/compt_plastic_wst.csv')
-  forest_area_sq_km = read_csv('data/environment/forest_area_sq_km.csv')
-  forest_coverage = read_csv('data/environment/forest_coverage_percent.csv')
-  forest_land_area = read_csv('data/environment/forest_land_total_area_ha.csv')
-  material_foot = read_csv('data/environment/matfootp.csv')
-  wood_removal = read_csv('data/environment/wood_removal_cubic_meters.csv')
-  
-  coal_consumption_per_cap = read_csv('data/energy/coal_consumption_per_cap.csv')
-  coal_consumption_total = read_csv('data/energy/coal_consumption_total.csv')
-  electricity_generation_per_person = read_csv('data/energy/electricity_generation_per_person.csv')
-  electricity_generation_total = read_csv('data/energy/electricity_generation_total.csv')
-  energy_production_per_person = read_csv('data/energy/energy_production_per_person.csv')
-  energy_production_total = read_csv('data/energy/energy_production_total.csv')
-  hydro_power_generation_per_person = read_csv('data/energy/hydro_power_generation_per_person.csv')
-  hydro_power_generation_total = read_csv('data/energy/hydro_power_generation_total.csv')
-  natural_gas_production_per_person = read_csv('data/energy/natural_gas_production_per_person.csv')
-  natural_gas_production_total = read_csv('data/energy/natural_gas_production_total.csv')
-  nuclear_power_generation_per_person = read_csv('data/energy/nuclear_power_generation_per_person.csv')
-  nuclear_power_generation_total = read_csv('data/energy/nuclear_power_generation_total.csv')
-  oil_consumption_per_cap = read_csv('data/energy/oil_consumption_per_cap.csv')
-  oil_consumption_total = read_csv('data/energy/oil_consumption_total.csv')
-  oil_production_per_cap = read_csv('data/energy/oil_production_per_person.csv')
-  oil_production_total = read_csv('data/energy/oil_production_total.csv')
-  residential_electricity_use_per_person = read_csv('data/energy/residential_electricity_use_per_person.csv')
-  residential_electricity_use_total = read_csv('data/energy/residential_electricity_use_total.csv')
-  
-  agriculture_percent = read_csv('data/economy/agriculture_percent_of_gdp.csv')
-  gdp_per_capita_growth = read_csv('data/economy/gdp_per_capita_yearly_growth.csv')
-  gdp_per_capita = read_csv('data/economy/gdppercapita_us_inflation_adjusted.csv')
-  gdp_per_employee = read_csv('data/economy/gdpperemployee_us_inflation_adjusted.csv')
-  gdp_per_working = read_csv('data/economy/gdpperworking_hour_us_inflation_adjusted.csv')
-  income = read_csv('data/economy/income_per_person_gdppercapita_ppp_inflation_adjusted.csv')
-  industry_percent = read_csv('data/economy/industry_percent_of_gdp.csv')
-  investment_percent = read_csv('data/economy/investments_percent_of_gdp.csv')
-  service_percent = read_csv('data/economy/services_percent_of_gdp.csv')
-  total_gdp = read_csv('data/economy/total_gdp_us_inflation_adjusted.csv')
-  working_hours_per_week = read_csv('data/economy/working_hours_per_week.csv')
-  
-  agriculture_workers_percent = read_csv('data/work/agriculture_workers_percent_of_employment.csv')
-  industry_workers_percent = read_csv('data/work/industry_workers_percent_of_employment.csv')
-  
-  democracy_score = read_csv('data/Society/democracy_score_use_as_color.csv')
-  hdi = read_csv('data/Society/hdi_human_development_index.csv')
-  military_expenditure_percent = read_csv('data/Society/military_expenditure_percent_of_gdp.csv')
-  
-  dataProcessing()
+total_data = list()
+total_data_list = c('yearly_co2_emissions_1000_tonnes', 'population_total', 'life_expectancy_years',
+                    'forest_area_sq_km', 'forest_coverage_percent', 'wood_removal_cubic_meters', 'matfootp', 'compt_plastic_wst',
+                    'coal_consumption_total', 'electricity_generation_total', 'residential_electricity_use_total',
+                    'hydro_power_generation_total', 'natural_gas_production_total', 'nuclear_power_generation_total',
+                    'oil_consumption_total', 'oil_production_total', 'energy_production_total', 'investments_percent_of_gdp',
+                    'working_hours_per_week', 'gdp_per_capita_yearly_growth', 'gdpperemployee_us_inflation_adjusted',
+                    'gdpperworking_hour_us_inflation_adjusted', 'total_gdp_us_inflation_adjusted', 'agriculture_percent_of_gdp',
+                    'industry_percent_of_gdp', 'services_percent_of_gdp', 'agriculture_workers_percent_of_employment',
+                    'industry_workers_percent_of_employment', 'democracy_score_use_as_color', 'hdi_human_development_index')
+
+price = list()
+price['wti'] = 53.965
+price['brent'] = 55.97
+price['natural_gas'] = 2.9
+price['gasoline'] = 169.325
+price['heating_oil'] = 163.3
+price['gasoil'] = 456.6
+price['kerosene'] = 544.63
+price['ecx_emission'] = 39.45
+
+for (i in total_data_list) {
+  temp = read_csv(paste0('data/', i, '.csv'))
+  temp %>% remove_rownames(.) %>% column_to_rownames(var = 'country')
+  total_data[[i]] = temp
 }
 
-dataProcessing = function () {
-  
+lastest_year_list = c()
+
+for (j in 1:length(total_data)) {
+  lastest_year_list[j] = as.numeric(colnames(total_data[[j]])[ncol(total_data[[j]])])
 }

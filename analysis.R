@@ -3,8 +3,6 @@ library(regbook)
 library(tidyverse)
 source('data_processing.r')
 
-resetData()
-
-regAnalysis <- function() {
+regAnalysis <- function(data_list) {
   
 }
