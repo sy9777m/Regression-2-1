@@ -25,3 +25,64 @@ for (i in total_data_list) {
   temp = read_csv(paste0('data/', i, '.csv'))
   total_data[[i]] = temp
 }
+
+dataProcessing = function(data_list) {
+  lastest_year_list = c()
+  
+  for (j in 1:length(data_list)) {
+    lastest_year_list[j] = as.numeric(colnames(data_list[[j]])[ncol(data_list[[j]])])
+  }
+  
+  lastest_year = min(lastest_year_list)
+  country_list = data_list[[1]][['country']]
+  
+  result = tibble(.rows = length(country_list))
+  
+  for (j in 1:length(data_list)) {
+    rownames(data_list[[j]]) = data_list[[j]][['country']]
+    for (c in country_list) {
+      if (!(c %in% data_list[[j]][['country']])) {
+        data_list[[j]][(nrow(data_list[[j]]) + 1),] = NA
+        data_list[[j]][(nrow(data_list[[j]])), 'country'] = c
+        rownames(data_list[[j]])[nrow(data_list[[j]])] = c
+      }
+    }
+    result = result %>% add_column(data_list[[j]] %>% filter(., country %in% country_list) %>% .[as.character(lastest_year)])
+    colnames(result)[j] = names(data_list)[j]
+  }
+  
+  rownames(result) = country_list
+  
+  result = result %>% drop_na()
+  
+  char_df = result[, unlist(lapply(result, is.character))]
+  
+  if (nrow(char_df) * ncol(char_df) != 0) {
+    for (j in 1:length(char_df)) {
+      temp_df = char_df[j]
+      temp_vector = c()
+      result_df = tibble(.rows = nrow(temp_df))
+      
+      for (i in 1:nrow(temp_df)) {
+        if (grepl('B', temp_df[i, 1], fixed = TRUE)) {
+          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^9)
+        }
+        else if (grepl('M', temp_df[i, 1], fixed = TRUE)) {
+          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^6)
+        }
+        else if (grepl('k', temp_df[i, 1], fixed = TRUE)) {
+          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^3)
+        }
+        else {
+          temp_vector[i] = as.double(temp_df[i, 1])
+        }
+      }
+      
+      result[, names(char_df)[j]] = temp_vector
+    }
+  }
+  
+  print(paste0('lastest year: ', lastest_year))
+  
+  return(result)
+}

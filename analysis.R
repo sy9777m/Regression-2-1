@@ -3,24 +3,16 @@ library(regbook)
 library(tidyverse)
 source('data_processing.r')
 
-sample_data_list = total_data[1:3]
+population_reg_data = dataProcessing(total_data[1:3])
+environment_reg_data = dataProcessing(append(total_data[1], total_data[4:8]))
+energy_reg_data = dataProcessing(append(total_data[1], total_data[9:17]))
+economy_reg_data = dataProcessing(append(total_data[1], total_data[18:26]))
+labor_reg_data = dataProcessing(append(total_data[1], total_data[27:28]))
+society_reg_data = dataProcessing(append(total_data[1], total_data[29:30]))
 
-regAnalysis <- function(data_list) {
-  lastest_year_list = c()
-  country_number_list = c()
-  
-  for (j in 1:length(data_list)) {
-    lastest_year_list[j] = as.numeric(colnames(data_list[[j]])[ncol(data_list[[j]])])
-    country_number_list[j] = nrow(data_list[[j]])
-  }
-  
-  lastest_year = min(lastest_year_list)
-  country_list = data_list[[match(min(country_number_list), country_number_list)]]['country']
-  
-  #fit = lm(data_list[[1]] ~ data_list[[2]] + data_list[[3]])
-  #print(fit)
-}
-
-regAnalysis(sample_data_list)
-
-#1st analysis
+pop_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., population_reg_data)
+env_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., environment_reg_data)
+energy_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., energy_reg_data)
+economy_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., economy_reg_data)
+labor_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., labor_reg_data)
+society_fit = lm(yearly_co2_emissions_1000_tonnes ~ ., society_reg_data)
