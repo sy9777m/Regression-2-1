@@ -1,4 +1,4 @@
-library(tidyverse)
+
 
 total_data = list()
 total_data_list = c('yearly_co2_emissions_1000_tonnes', 'population_total', 'life_expectancy_years',
@@ -10,16 +10,6 @@ total_data_list = c('yearly_co2_emissions_1000_tonnes', 'population_total', 'lif
                     'gdpperworking_hour_us_inflation_adjusted', 'total_gdp_us_inflation_adjusted', 'agriculture_percent_of_gdp',
                     'industry_percent_of_gdp', 'services_percent_of_gdp', 'agriculture_workers_percent_of_employment',
                     'industry_workers_percent_of_employment', 'democracy_score_use_as_color', 'hdi_human_development_index')
-
-price = list()
-price['wti'] = 53.965
-price['brent'] = 55.97
-price['natural_gas'] = 2.9
-price['gasoline'] = 169.325
-price['heating_oil'] = 163.3
-price['gasoil'] = 456.6
-price['kerosene'] = 544.63
-price['ecx_emission'] = 39.45
 
 for (i in total_data_list) {
   temp = read_csv(paste0('data/', i, '.csv'))
