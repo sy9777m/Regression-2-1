@@ -55,16 +55,16 @@ dataProcessing = function(data_list) {
       
       for (i in 1:nrow(temp_df)) {
         if (grepl('B', temp_df[i, 1], fixed = TRUE)) {
-          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^9)
+          temp_vector[i] = log(as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^9))
         }
         else if (grepl('M', temp_df[i, 1], fixed = TRUE)) {
-          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^6)
+          temp_vector[i] = log(as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^6))
         }
         else if (grepl('k', temp_df[i, 1], fixed = TRUE)) {
-          temp_vector[i] = as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^3)
+          temp_vector[i] = log(as.double(str_sub(temp_df[i, 1], 1, -2)) * (10^3))
         }
         else {
-          temp_vector[i] = as.double(temp_df[i, 1])
+          temp_vector[i] = log(as.double(temp_df[i, 1]))
         }
       }
       
