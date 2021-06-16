@@ -1,5 +1,3 @@
-
-
 total_data = list()
 total_data_list = c('yearly_co2_emissions_1000_tonnes', 'population_total', 'life_expectancy_years',
                     'forest_area_sq_km', 'forest_coverage_percent', 'wood_removal_cubic_meters', 'matfootp', 'compt_plastic_wst',
@@ -15,6 +13,14 @@ for (i in total_data_list) {
   temp = read_csv(paste0('data/', i, '.csv'))
   total_data[[i]] = temp
 }
+
+carbon = read_csv('data/carbon_emission.csv', local = locale(encoding = "latin1"))
+greenhouse_worldbank = read_csv('data/greenhouse_gas_emissions_world_bank.csv')
+electricity_from_renewable = read_csv('data/electricity_production_from_renewable.csv')
+
+total_data[['carbon']] = carbon
+total_data[['greenhouse']] = greenhouse_worldbank
+total_data[['electricity_from_renewable']] = electricity_from_renewable
 
 dataProcessing = function(data_list) {
   lastest_year_list = c()
@@ -71,6 +77,9 @@ dataProcessing = function(data_list) {
       result[, names(char_df)[j]] = temp_vector
     }
   }
+  
+  is.na(result) = sapply(result, is.infinite)
+  result[is.na(result)] = 0
   
   print(paste0('lastest year: ', lastest_year))
   

@@ -1,0 +1,13 @@
+Sys.setlocale("LC_ALL","English")
+library(regbook)
+library(tidyverse)
+source('data_processing.r')
+
+second_reg_data = append(total_data[32], total_data[9]) %>% append(., total_data[15]) %>% dataProcessing(.)
+second_reg_data[1] = log(second_reg_data[1] * 1000)
+pairs(second_reg_data)
+second_fit = lm(greenhouse ~ ., second_reg_data)
+summary(second_fit)
+anova(second_fit)
+par(mfrow = c(2,2))
+plot(second_fit)
